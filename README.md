@@ -1,9 +1,5 @@
 [![Angular Logo](https://www.vectorlogo.zone/logos/angular/angular-icon.svg)](https://angular.io/) [![Electron Logo](https://www.vectorlogo.zone/logos/electronjs/electronjs-icon.svg)](https://electronjs.org/)
 
-![Maintained][maintained-badge]
-[![Make a pull request][prs-badge]][prs]
-[![License][license-badge]](LICENSE.md)
-
 # ImageKiller
 
 Bei ImageKiller handelt es sich um eine Desktop-App zum aussortieren von Bildern auf der SD-Karte.

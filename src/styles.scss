@@ -1,0 +1,23 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+/* You can add global styles to this file, and also import other style files */
+html, body {
+  margin: 0;
+  padding: 0;
+
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.as-split-gutter {
+  background: rgba(55, 65, 81, 1) !important;
+}
+
+.ps .ps__rail-y:hover, .ps .ps__rail-y:focus {
+  background-color: unset !important;
+}
+
+perfect-scrollbar>.ps.ps--active-y>.ps__rail-y {
+  background-color: unset !important;
+}
