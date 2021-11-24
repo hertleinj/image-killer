@@ -27,6 +27,8 @@ function createWindow(): BrowserWindow {
     y: 0,
     width: size.width,
     height: size.height,
+    backgroundColor: '#6b7280',
+    show: false,
     webPreferences: {
       enableBlinkFeatures: "CSSColorSchemeUARendering",
       nodeIntegration: false,
@@ -62,6 +64,10 @@ function createWindow(): BrowserWindow {
       slashes: true
     }));
   }
+
+  win.once('ready-to-show', () => {
+    win.show()
+  })
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -163,7 +169,7 @@ ipcMain.on('get-folder', (event, folder: Folder) => {
           rxjsoperators.mergeMap((v) => v)
         ).subscribe(
           files => {
-            event.sender.send('set-files', { 'files': files })
+            event.sender.send('set-files', { 'files': (files as Array<Picture>).sort((a, b) => a.stats.ctime - b.stats.ctime) })
             state.files = files as Picture[];
           }
         )

@@ -60,15 +60,15 @@ import { Observable, from, of, combineLatest } from "rxjs";
       <div class="overflow-y-auto overflow-x-hidden flex-grow flex flex-col">
         <cdk-virtual-scroll-viewport itemSize="40" minBufferPx = "200" maxBufferPx = "250" class="flex-grow">
           <div
-            *cdkVirtualFor="let file of this.folderstore.files$ | async"
+            *cdkVirtualFor="let file of this.folderstore.files$ | async ; index as i"
             (click)="this.folderstore.loadPic(file)"
             style="cursor: pointer;"
             [class.bg-gray-800]="file.active"
             [id]="file.name"
           >
-            <div *ngIf="file.stats.datebreak">{{ file.stats.date }}</div>
             <div class="w-full">
-              <div class="flex cursor-pointer my-1 hover:bg-gray-700 content-evenly">
+              <div class="flex flex-wrap cursor-pointer my-1 hover:bg-gray-700 content-evenly">
+                <div *ngIf="file.stats.datebreak || i == 0" class="w-full text-center pt-2">{{ file.stats.ctime.toLocaleDateString() }}</div>
                 <div class="w-8 h-10 text-center py-1 text-blue-300">
                   <p class="text-3xl p-0 "
                   [class.text-green-300]="file.copiedTypes.length === file.types.length"

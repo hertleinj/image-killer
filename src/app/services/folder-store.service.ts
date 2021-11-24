@@ -33,6 +33,8 @@ export class FolderStoreService {
                 }
             });
 
+            console.log(args.files)
+
             this.ngZone.run(() => this._files$.next(args.files));
         });
 
