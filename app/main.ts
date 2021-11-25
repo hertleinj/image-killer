@@ -6,9 +6,12 @@ import { Actions } from './models/Actions.model';
 import { FFState } from './models/ffstate.model';
 import { Folder } from './models/folderSetGet.model';
 import { generateFilePath, Picture } from './models/picture.model';
-
+import { autoUpdater } from "electron-updater"
 // Initialize remote module
 require('@electron/remote/main').initialize();
+
+autoUpdater.logger = require("electron-log");
+(autoUpdater.logger as any).transports.file.level = "info";
 
 let win: BrowserWindow = null;
 let picCache = null;
@@ -67,6 +70,7 @@ function createWindow(): BrowserWindow {
 
   win.once('ready-to-show', () => {
     win.show()
+    autoUpdater.checkForUpdatesAndNotify()
   })
 
   // Emitted when the window is closed.

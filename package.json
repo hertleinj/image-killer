@@ -1,6 +1,6 @@
 {
   "name": "image-killer",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Look through Images fast and copy jpeg and raw to target folder.",
   "homepage": "...",
   "author": {
@@ -56,10 +56,12 @@
     "@ngneat/tailwind": "7.0.3",
     "angular-split": "5.0.0",
     "angular2-hotkeys": "2.4.0",
+    "electron-log": "4.4.1",
+    "electron-updater": "^4.6.0",
     "node-cache": "5.1.2",
     "rxjs": "~6.6.0",
     "scroll-into-view-if-needed": "2.2.28",
-    "sharp": "0.29.2",
+    "sharp": "0.29.3",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"
   },
