@@ -8,7 +8,9 @@ import { PicStoreService } from '../services/pic-store.service';
   selector: 'div[image-view]',
   template: `
     <div *ngIf='picSet'>
-    	<img [src]="picSrc" class="contain"/>
+      <pinch-zoom>
+        <img [src]="picSrc" class="contain"/>
+      </pinch-zoom>
     </div>
     <!--<iron-icon *ngIf='!picSet' icon="vaadin:picture"></iron-icon>-->`,
   styles: [`

@@ -17,6 +17,7 @@ import { HotkeyModule } from 'angular2-hotkeys';
 import { Truncate } from './pipes/uriTruncate';
 import { AngularSplitModule } from 'angular-split';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { PinchZoomModule } from 'ngx-pinch-zoom';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -33,6 +34,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   imports: [
     BrowserModule,
     AngularSplitModule,
+    PinchZoomModule,
     FormsModule,
     HotkeyModule.forRoot(),
     HttpClientModule,

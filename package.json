@@ -58,6 +58,7 @@
     "angular2-hotkeys": "2.4.0",
     "electron-log": "4.4.1",
     "electron-updater": "^4.6.0",
+    "ngx-pinch-zoom": "2.6.2",
     "node-cache": "5.1.2",
     "rxjs": "~6.6.0",
     "scroll-into-view-if-needed": "2.2.28",
