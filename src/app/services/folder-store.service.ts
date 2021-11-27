@@ -86,8 +86,12 @@ export class FolderStoreService {
     }
 
 
-    loadPic(pic: Picture) {
-        (window as any).api.send('load-pic', { "pic": pic, "fullres": true });
+    loadPic(event: any, pic: Picture) {
+        if(event.ctrlKey) {
+            (window as any).api.send('load-additional-pic', { "pic": pic, "fullres": true });
+        } else {
+            (window as any).api.send('load-pic', { "pic": pic, "fullres": true });
+        }
         this._lastFileRequested$.next(pic.name);
         this._pendingLoad$.next(true);
         // Store old Array

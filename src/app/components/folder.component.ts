@@ -61,7 +61,7 @@ import { Observable, from, of, combineLatest } from "rxjs";
         <cdk-virtual-scroll-viewport itemSize="40" minBufferPx = "200" maxBufferPx = "250" class="flex-grow">
           <div
             *cdkVirtualFor="let file of this.folderstore.files$ | async ; index as i"
-            (click)="this.folderstore.loadPic(file)"
+            (click)="this.folderstore.loadPic($event,file)"
             style="cursor: pointer;"
             [class.bg-gray-800]="file.active"
             [id]="file.name"

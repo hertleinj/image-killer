@@ -196,11 +196,11 @@ ipcMain.on('load-pic', (event, arg) => {
       x => {
         if (arg.fullres) {
           sharp(x).rotate().toBuffer().then(x => {
-            ipcSendPic(event, x.toString('base64'), filePath, arg.pic.name)
+            ipcSendPic(event, x.toString('base64'), filePath, arg.pic.name, 'set-pic')
           })
         } else {
           sharp(x).rotate().resize(getMaxPixel()).toBuffer().then(x => {
-            ipcSendPic(event, x.toString('base64'), filePath, arg.pic.name)
+            ipcSendPic(event, x.toString('base64'), filePath, arg.pic.name, 'set-pic')
           })
         }
       }
@@ -214,6 +214,37 @@ ipcMain.on('load-pic', (event, arg) => {
   // Nutzlos?
   //state.activeFile = state.files[state.files.map(x => x.name).indexOf(args.name)]
   //event.sender.send('set-active', state.activeFile)
+})
+
+ipcMain.on('load-additional-pic', (event, arg) => {
+  const NodeCache = require("node-cache");
+  if (picCache === null) {
+    picCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
+  }
+  sharp = require('sharp');
+  preloadBreak = true;
+  const filePath = generateFilePath(arg.pic)
+  let base64Pic = picCache.get(filePath);
+  if (base64Pic === undefined) {
+    readFileAsObs(filePath).subscribe(
+      x => {
+        if (arg.fullres) {
+          sharp(x).rotate().toBuffer().then(x => {
+            ipcSendPic(event, x.toString('base64'), filePath, arg.pic.name, 'add-pic')
+          })
+        } else {
+          sharp(x).rotate().resize(getMaxPixel()).toBuffer().then(x => {
+            ipcSendPic(event, x.toString('base64'), filePath, arg.pic.name, 'add-pic')
+          })
+        }
+      }
+    )
+  } else {
+    event.sender.send('add-pic', { type: path.extname(generateFilePath(arg.pic)), name: arg.pic.name, data: base64Pic });
+  }
+  state.activeFile = arg.pic;
+  preloadBreak = false;
+  preloadNextPics();
 })
 
 
@@ -237,9 +268,9 @@ function getMaxPixel() {
   return screen.getPrimaryDisplay().workAreaSize.width * 2;
 }
 
-function ipcSendPic(event, base64PicData: string, fullpath: string, name: string): void {
+function ipcSendPic(event, base64PicData: string, fullpath: string, name: string, channel: string): void {
   picCache.set(fullpath, base64PicData);
-  event.sender.send('set-pic', { data: base64PicData, type: path.extname(fullpath), name: name });
+  event.sender.send(channel, { data: base64PicData, type: path.extname(fullpath), name: name });
   console.log(picCache.getStats());
 }
 

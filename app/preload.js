@@ -11,13 +11,13 @@ contextBridge.exposeInMainWorld(
         console.log("From Renderer to Backend - Channel: " + channel)
         console.log(data)
         // whitelist channels
-        let validChannels = ["do-action", "load-pic", "get-folder", "copy-pic"];
+        let validChannels = ["do-action", "load-pic", "get-folder", "copy-pic","load-additional-pic"];
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
         }
     },
     receive: (channel, func) => {
-        let validChannels = ["set-pic", "set-folder", "set-files"];
+        let validChannels = ["set-pic", "set-folder", "set-files","add-pic"];
         if (validChannels.includes(channel)) {
             // Deliberately strip event as it includes `sender`
             ipcRenderer.on(channel, (event, args) => {
