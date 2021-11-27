@@ -8,7 +8,7 @@ import { PicStoreService } from '../services/pic-store.service';
   selector: 'div[image-view]',
   template: `
     <div *ngIf='picSet' class="flex flex-row flex-wrap" >
-      <pinch-zoom *ngFor="let pic of picSrc | async" class="flex-1 min-w-1/3">
+      <pinch-zoom *ngFor="let pic of picSrc | async" class="flex-1">
         <img [src]="pic" class="contain"/>
       </pinch-zoom>
     </div>
