@@ -5,6 +5,7 @@ export class Picture {
     transfered: string[];
     buffered: boolean;
     active: boolean;
+    active_second?:boolean;
     bufferedUri: string;
     copiedTypes: string[];
     stats: any; // File Stats & Frontend stats.datebreak == true & stats.date
@@ -27,6 +28,9 @@ export function generateFilePath(pic: Picture, type?: string[]): string {
                 path = generateFilePathForOne(pic.folder, pic.name, element);
             }
         });
+        if(path === undefined) {
+            path = generateFilePathForOne(pic.folder, pic.name, pic.types[0]);
+        }
     } else if (path === undefined) {
         if (pic.types.includes("png") || pic.types.includes("PNG")) {
             generateFilePathForOne(pic.folder, pic.name, "png")
