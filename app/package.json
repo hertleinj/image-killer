@@ -1,6 +1,6 @@
 {
   "name": "image-killer",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "main": "main.js",
   "private": true,
   "dependencies": {
