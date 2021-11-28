@@ -25,7 +25,8 @@
     "icon": "dist/assets/icons",
     "target": [
       "portable","nsis"
-    ]
+    ],
+    "publish": ["github"]
   },
   "portable": {
     "splashImage": "dist/assets/icons/icon.bmp"
