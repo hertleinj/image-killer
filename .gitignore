@@ -2,6 +2,7 @@
 
 # compiled output
 /dist
+app/**/*.js
 /tmp
 /out-tsc
 /app-builds
