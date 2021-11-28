@@ -8,6 +8,12 @@ import scrollIntoView from "scroll-into-view-if-needed";
 @Injectable({ providedIn: 'root' })
 export class FolderStoreService {
 
+    private _folder$ = new BehaviorSubject<string>('');
+    private _files$ = new BehaviorSubject<Picture[]>([]);
+    private _targetFolder$ = new BehaviorSubject<string>('');
+    private _lastFileRequested$ = new BehaviorSubject<string>('');
+    private activeFileIndex: number;
+    private _pendingLoad$ = new BehaviorSubject<boolean>(false);
 
     constructor(private ngZone: NgZone) {
         (window as any).api.receive('set-folder', (event, args: Folder) => {
@@ -21,13 +27,17 @@ export class FolderStoreService {
 
         (window as any).api.receive('set-files', (event, args) => {
             console.log(args)
+            if (args.files.length <= this.activeFileIndex) {
+                console.log("done")
+                this.activeFileIndex = undefined;
+            }
             if (this.activeFileIndex !== undefined) {
                 args.files[this.activeFileIndex].active = true;
             }
 
             args.files.map((file, index, arr) => {
                 file.stats.datebreak = false;
-                if(file.stats.ctime <= new Date()) {
+                if (file.stats.ctime <= new Date()) {
                     file.stats.tempDay = Math.trunc(file.stats.ctimeMs / 86400000);
                     file.showdate = file.stats.ctime
                     if (index > 0 && arr[index - 1].stats.tempDay !== file.stats.tempDay) {
@@ -67,12 +77,6 @@ export class FolderStoreService {
         });**/
     }
 
-    private _folder$ = new BehaviorSubject<string>('');
-    private _files$ = new BehaviorSubject<Picture[]>([]);
-    private _targetFolder$ = new BehaviorSubject<string>('');
-    private _lastFileRequested$ = new BehaviorSubject<string>('');
-    private activeFileIndex: number;
-    private _pendingLoad$ = new BehaviorSubject<boolean>(false);
 
 
     get folder$(): Observable<string> {
@@ -123,7 +127,7 @@ export class FolderStoreService {
 
     loadnextPic() {
         const picArray = this._files$.value;
-        if (this.activeFileIndex !== undefined && this.activeFileIndex !== picArray.length - 1) {
+        if (this.activeFileIndex !== undefined && this.activeFileIndex <= picArray.length - 1) {
             // Aktiv Setzten und Propagieren
             picArray[this.activeFileIndex].active = false;
             picArray[this.activeFileIndex + 1].active = true;

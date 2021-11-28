@@ -144,7 +144,7 @@ ipcMain.on('get-folder', (event, folder: Folder) => {
               return new Picture(e0[0], e0[1], erg.filePaths[0]);
             })
           }),
-          // Zusammenfassen von Gleichen bildern mit unterschiedlichen Dateiendungen
+          // Zusammenfassen von Gleichen Bildern mit unterschiedlichen Dateiendungen
           rxjsoperators.map((list: Array<Picture>) => {
             list.sort((a: Picture, b: Picture) => a.name.localeCompare(b.name))
             var mergedItems: Picture[];
@@ -190,7 +190,10 @@ ipcMain.on('load-pic', (event, arg) => {
   sharp = require('sharp');
   preloadBreak = true;
   const filePath = generateFilePath(arg.pic)
-  let base64Pic = picCache.get(filePath);
+  let base64Pic = undefined;
+  try {
+    base64Pic = picCache.get(filePath);
+  } catch (e) { console.log(e) }
   if (base64Pic === undefined) {
     readFileAsObs(filePath).subscribe(
       x => {
@@ -275,19 +278,23 @@ function ipcSendPic(event, base64PicData: string, fullpath: string, name: string
 }
 
 function preloadNextPics() {
-  const offsetActive = state.files.map(x => x.name).indexOf(state.activeFile.name)
-  for (let index = -2; index < 4 && index + 1 + offsetActive >= 0 && index + 1 + offsetActive < state.files.length; index++) {
-    if (preloadBreak) break;
-    const pic = state.files[index + 1 + offsetActive];
-    const picpath = generateFilePath(pic);
-    if (!picCache.has(picpath)) {
-      readFileAsObs(picpath).subscribe(
-        x => {
-          sharp(x).rotate().toBuffer().then(x => {
-            picCache.set(picpath, x.toString('base64'));
+  try {
+    const offsetActive = state.files.map(x => x.name).indexOf(state.activeFile.name)
+    for (let index = -2; index < 4 && index + 1 + offsetActive >= 0 && index + 1 + offsetActive < state.files.length; index++) {
+      if (preloadBreak) break;
+      const pic = state.files[index + 1 + offsetActive];
+      const picpath = generateFilePath(pic);
+      if (!picCache.has(picpath)) {
+        readFileAsObs(picpath).subscribe(
+          x => {
+            sharp(x).rotate().toBuffer().then(x => {
+              picCache.set(picpath, x.toString('base64'));
+            })
           })
-        })
+      }
     }
+  } catch (e) {
+    console.log(e)
   }
 }
 

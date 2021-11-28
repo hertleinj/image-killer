@@ -7,9 +7,10 @@ import { PicStoreService } from '../services/pic-store.service';
 @Component({
   selector: 'div[image-view]',
   template: `
-    <div *ngIf='picSet' class="flex flex-row flex-wrap" >
+    <div *ngIf='picSet' class="flex flex-row flex-wrap z-0" >
       <pinch-zoom *ngFor="let pic of picSrc | async" class="flex-1">
-        <img [src]="pic" class="contain"/>
+        <img [src]="pic.data" class="contain"/>
+        <div class="z-10 absolute bottom-0 px-6 pt-2 rounded-t-2xl bg-gray-800 bg-opacity-75">{{pic.name}}</div>
       </pinch-zoom>
     </div>
     <div *ngIf="!picSet" class="bg-gray-700 w-3/5 mx-auto rounded-lg border border-gray-800 p-6 lg:py-8 lg:px-14 text-gray-300">
@@ -94,13 +95,17 @@ export class HomeComponent implements OnInit {
   picSet: Boolean = false;
 
   constructor(private _ngZone: NgZone, private sanitizer: DomSanitizer, public folderstore: FolderStoreService, private picStore: PicStoreService) {
+    this.folderstore.folder$.subscribe( (o : string) => {
+      this.picSrc.next([]);
+      this.picSet = false;
+    })
   }
 
   ngOnInit() {
     (window as any).api.receive('set-pic', (event, arg) => {
       this._ngZone.run(() => {
         if (arg.name === this.folderstore.activeFile.name) {
-          this.picSrc.next([this.sanitizer.bypassSecurityTrustResourceUrl("data:image/" + arg.type + ";base64," + arg.data)]);
+          this.picSrc.next([{ name: arg.name, data: this.sanitizer.bypassSecurityTrustResourceUrl("data:image/" + arg.type + ";base64," + arg.data) }]);
           this.picSet = true;
         }
         this.picStore.updateCurrentPic(arg);
@@ -112,7 +117,7 @@ export class HomeComponent implements OnInit {
       this._ngZone.run(() => {
         if (arg.name === this.folderstore.activeFile.name) {
           let test = this.picSrc.value;
-          if(test.length === 2){
+          if (test.length === 2) {
             test = [test[1]]
           }
           test.push(this.sanitizer.bypassSecurityTrustResourceUrl("data:image/" + arg.type + ";base64," + arg.data))
