@@ -27,10 +27,20 @@ export class FolderStoreService {
 
             args.files.map((file, index, arr) => {
                 file.stats.datebreak = false;
-                file.stats.tempDay = Math.trunc(file.stats.ctimeMs / 86400000);
-                if (index > 0 && arr[index - 1].stats.tempDay !== file.stats.tempDay) {
-                    file.stats.datebreak = true;
+                if(file.stats.ctime <= new Date()) {
+                    file.stats.tempDay = Math.trunc(file.stats.ctimeMs / 86400000);
+                    file.showdate = file.stats.ctime
+                    if (index > 0 && arr[index - 1].stats.tempDay !== file.stats.tempDay) {
+                        file.stats.datebreak = true;
+                    }
+                } else {
+                    file.stats.tempDay = Math.trunc(file.stats.mtimeMs / 86400000);
+                    file.showdate = file.stats.mtime
+                    if (index > 0 && arr[index - 1].stats.tempDay !== file.stats.tempDay) {
+                        file.stats.datebreak = true;
+                    }
                 }
+
             });
 
             console.log(args.files)
@@ -87,7 +97,7 @@ export class FolderStoreService {
 
 
     loadPic(event: any, pic: Picture) {
-        if(event.ctrlKey) {
+        if (event.ctrlKey) {
             (window as any).api.send('load-additional-pic', { "pic": pic, "fullres": true });
         } else {
             (window as any).api.send('load-pic', { "pic": pic, "fullres": true });
@@ -99,6 +109,9 @@ export class FolderStoreService {
         // Bisheriges Pic auf not active setzten
         if (this.activeFileIndex !== undefined) {
             picArray[this.activeFileIndex].active = false;
+            if (event.ctrlKey) {
+                picArray[this.activeFileIndex].active_second = true;
+            }
         }
         // Aktiv Setzten und Propagieren
         this.activeFileIndex = picArray.findIndex((pic2) => {

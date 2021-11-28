@@ -68,7 +68,7 @@ import { Observable, from, of, combineLatest } from "rxjs";
           >
             <div class="w-full">
               <div class="flex flex-wrap cursor-pointer my-1 hover:bg-gray-700 content-evenly">
-                <div *ngIf="file.stats.datebreak || i == 0" class="w-full text-center pt-2">{{ file.stats.ctime.toLocaleDateString() }}</div>
+                <div *ngIf="file.stats.datebreak || i == 0" class="w-full text-center pt-2">{{ file.showdate.toLocaleDateString() }}</div>
                 <div class="w-8 h-10 text-center py-1 text-blue-300">
                   <p class="text-3xl p-0 "
                   [class.text-green-300]="file.copiedTypes.length === file.types.length"
