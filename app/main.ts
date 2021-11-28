@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as url from 'url';
 import { Actions } from './models/Actions.model';
-import { FFState } from './models/ffstate.model';
+import { SessionState } from './models/Sessionstate.model';
 import { Folder } from './models/folderSetGet.model';
 import { generateFilePath, Picture } from './models/picture.model';
 //import { autoUpdater } from "electron-updater"
@@ -121,7 +121,7 @@ const readFileAsObs = rxjs.bindNodeCallback(fs.readFile);
 let preloadBreak = false;
 
 const allowedEndings = ["jpg", "png", "raw", "orf", "raf"]
-var state = new FFState();
+var state = new SessionState();
 
 
 ipcMain.on('get-folder', (event, folder: Folder) => {

@@ -1,6 +1,6 @@
 import { Picture } from './picture.model';
 
-export class FFState {
+export class SessionState {
     fromFolder : string;
     toFolder : string;
     files : Picture[];
