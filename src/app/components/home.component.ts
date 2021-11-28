@@ -7,11 +7,14 @@ import { PicStoreService } from '../services/pic-store.service';
 @Component({
   selector: 'div[image-view]',
   template: `
-    <div *ngIf='picSet' class="flex flex-row flex-wrap z-0" >
-      <pinch-zoom *ngFor="let pic of picSrc | async" class="flex-1">
-        <img [src]="pic.data" class="contain"/>
-        <div class="z-10 absolute bottom-0 px-6 pt-2 rounded-t-2xl bg-gray-800 bg-opacity-75">{{pic.name}}</div>
-      </pinch-zoom>
+    <div *ngIf='picSet' class="flex flex-row flex-wrap z-0 h-full" >
+     <div class="flex flex-row flex-wrap z-0 flex-1 h-full border-r border-gray-800" *ngFor="let pic of picSrc | async">
+        <pinch-zoom  class="m-auto flex h-full bg-transparent">
+          <img [src]="pic.data" class="contain"/>
+        </pinch-zoom>
+
+        <div class="z-10 absolute bottom-0 px-6 pt-2 rounded-tr-xl bg-gray-800 bg-opacity-75">{{pic.name}}</div>
+      </div>
     </div>
     <div *ngIf="!picSet" class="bg-gray-700 w-3/5 mx-auto rounded-lg border border-gray-800 p-6 lg:py-8 lg:px-14 text-gray-300">
     <div   class="text-white w-full flex relative shadow-sm justify-start mb-10 border-b-2 border-gray-100 border-opacity-20">
@@ -84,6 +87,7 @@ import { PicStoreService } from '../services/pic-store.service';
     }
     pinch-zoom {
         width: 100%;
+        background-color: rgb(107, 114, 128) !important;
     }
     img {
         max-height: 100vh !important;
@@ -95,7 +99,7 @@ export class HomeComponent implements OnInit {
   picSet: Boolean = false;
 
   constructor(private _ngZone: NgZone, private sanitizer: DomSanitizer, public folderstore: FolderStoreService, private picStore: PicStoreService) {
-    this.folderstore.folder$.subscribe( (o : string) => {
+    this.folderstore.folder$.subscribe((o: string) => {
       this.picSrc.next([]);
       this.picSet = false;
     })
@@ -120,7 +124,7 @@ export class HomeComponent implements OnInit {
           if (test.length === 2) {
             test = [test[1]]
           }
-          test.push(this.sanitizer.bypassSecurityTrustResourceUrl("data:image/" + arg.type + ";base64," + arg.data))
+          test.push({ name: arg.name, data:this.sanitizer.bypassSecurityTrustResourceUrl("data:image/" + arg.type + ";base64," + arg.data)})
           this.picSrc.next(test);
           this.picSet = true;
         }
